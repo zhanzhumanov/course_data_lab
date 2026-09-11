@@ -7,7 +7,7 @@ export const obj = {
   b: 2,
   c: 3,
   [Symbol.iterator]() {
-
+ return [this.a, this.b, this.c][Symbol.iterator]();
   }
 };
 
