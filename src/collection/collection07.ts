@@ -3,7 +3,9 @@
 */
 
 export function countFrequency(arr: string[]): Map<string, number> {
-  const map = new Map();
-
+  const map = new Map<string, number>();
+ for (const item of arr) {
+    map.set(item, (map.get(item) ?? 0) + 1);
+  }
   return map;
 }
