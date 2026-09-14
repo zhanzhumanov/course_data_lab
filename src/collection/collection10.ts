@@ -4,6 +4,8 @@
 
 export function invertMap<K, V>(map: Map<K, V>): Map<V, K> {
 	const newMap = new Map<V, K>();
-
+map.forEach((value, key) => {
+    newMap.set(value, key);
+  });
 	return newMap;
 }
