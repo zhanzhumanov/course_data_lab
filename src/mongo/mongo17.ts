@@ -20,7 +20,14 @@ export interface TopProduct {
 export async function get_top_selling_products(db: Db, limit: number): Promise<TopProduct[]> {
     // TODO: Найти топ-N продуктов по количеству продаж
 	return  await db.collection("products").aggregate([
-
-	]).toArray() as TopProduct[]
+{
+        $sort: {
+        sales: -1
+        }
+        },
+        {
+            $limit: limit
+        }
+    ]).toArray() as TopProduct[]
 }
 
