@@ -20,15 +20,36 @@ export interface ManagementEmployee {
 	level: number
 }
 
-export async function get_management_chain(db: Db, employeeId: string): Promise<ManagementEmployee[]> {
-	// TODO: Найти всю цепочку управления для сотрудника (все менеджеры выше)
-	// Используйте операцию $graphLookup
-	return await db.collection("employees").aggregate([
-		{
-			$match: {
-				_id: employeeId // Начинаем с указанного сотрудника
-			}
-		},
-		
-	]).toArray() as ManagementEmployee[]
+
+export async function get_management_chain(
+    db: Db,
+    employeeId: string
+): Promise<ManagementEmployee[]> {
+    const result = await db.collection("employees").aggregate([
+        {
+            $match: {
+                _id: employeeId
+            }
+        },
+        {
+            $graphLookup: {
+                from: "employees",
+                startWith: "$managerId",
+                connectFromField: "managerId",
+                connectToField: "_id",
+                as: "managementChain",
+                depthField: "level"
+            }
+        },
+        {
+            $unwind: "$managementChain"
+        },
+        {
+            $replaceRoot: {
+                newRoot: "$managementChain"
+            }
+        }
+    ]).toArray()
+
+    return result as ManagementEmployee[]
 }
