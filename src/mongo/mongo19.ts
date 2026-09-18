@@ -26,6 +26,22 @@ export async function get_order_totals(db: Db): Promise<OrderTotal[]> {
 	// TODO: Рассчитать итоговую сумму для каждого заказа с учетом скидки
 	// Поля: product, total (quantity * unitPrice), finalTotal (total - discount)
 	return await db.collection("orders").aggregate([
-
+ {
+            $project: {
+                product: 1,
+                quantity: 1,
+                unitPrice: 1,
+                discount: 1,
+                total: {
+                    $multiply: ["$quantity", "$unitPrice"]
+                },
+                finalTotal: {
+                    $subtract: [
+                        { $multiply: ["$quantity", "$unitPrice"] },
+                        "$discount"
+                    ]
+                }
+            }
+        }
 	]).toArray() as OrderTotal[]
 }
