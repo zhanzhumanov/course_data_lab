@@ -21,5 +21,17 @@ export interface OrderWithPrices {
 }
 
 export function calculateOrderTotal(xmlDoc: Document): number {
+  const items = xmlDoc.getElementsByTagName("item");
+  let total = 0;
 
+  for (const item of Array.from(items)) {
+    const price = item.getAttribute("price");
+    const quantity = item.getAttribute("quantity");
+
+    if (price !== null && quantity !== null) {
+      total += Number(price) * Number(quantity);
+    }
+  }
+
+  return total;
 }
