@@ -9,7 +9,11 @@ import { SAXParser } from "sax";
 export function countBooks(xml: string): number {
   const parser = new SAXParser(true);
   let count = 0;
-
+ parser.onopentag = (node) => {
+    if (node.name === "book") {
+      count++;
+    }
+  };
   // TODO: Добавьте обработчик события открытия тега
   // Если имя тега - 'book', увеличивайте count
   
