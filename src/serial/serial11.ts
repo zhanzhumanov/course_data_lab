@@ -28,5 +28,16 @@ export interface User {
 }
 
 export function getAllUserEmails(xmlDoc: Document): string[] {
+  const users = xmlDoc.getElementsByTagName("user");
+  const emails: string[] = [];
 
+  for (const user of Array.from(users)) {
+    const email = user.getElementsByTagName("email")[0];
+
+    if (email) {
+      emails.push(email.textContent ?? "");
+    }
+  }
+
+  return emails;
 }
