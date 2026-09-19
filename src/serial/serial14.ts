@@ -34,5 +34,23 @@ export interface UserWithRole {
   };
 }
 
-export function findUsersWithRole(xmlDoc: Document, targetRole: string): Element[] {
+export function findUsersWithRole(
+  xmlDoc: Document,
+  targetRole: string
+): Element[] {
+  const users = xmlDoc.getElementsByTagName("user");
+  const result: Element[] = [];
+
+  for (const user of Array.from(users)) {
+    const roles = user.getElementsByTagName("role");
+
+    for (const role of Array.from(roles)) {
+      if (role.textContent === targetRole) {
+        result.push(user);
+        break;
+      }
+    }
+  }
+
+  return result;
 }
